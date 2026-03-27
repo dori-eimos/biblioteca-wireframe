@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca — Wireframe v2</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fff;min-height:100vh}
+  .screen{display:none;flex-direction:column;min-height:100vh;background:#fff}
+  .screen.active{display:flex}
+  .topbar{background:#1a1a1a;color:#fff;padding:12px 32px;display:flex;align-items:center;gap:24px}
+  .topbar-logo{font-weight:600;font-size:15px;letter-spacing:-0.3px}
+  .topbar-nav{display:flex;gap:24px;font-size:12px;opacity:0.65;margin-left:32px}
+  .topbar-nav span{cursor:pointer}
+  .topbar-nav span:hover{opacity:1}
+  .topbar-user{margin-left:auto;font-size:12px;opacity:0.75}
+  .page-header{background:#f7f7f7;border-bottom:1px solid #e5e5e5;padding:20px 32px}
+  .page-title{font-size:24px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+  .page-subtitle{font-size:13px;color:#888}
+  .content{padding:0 32px 32px;flex:1;background:#fff}
+
+  .nav-tabs{display:flex;border-bottom:2px solid #e5e5e5;margin-bottom:0}
+  .nav-tab{padding:14px 24px;font-size:14px;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;color:#888;transition:all 0.15s;user-select:none;font-weight:500}
+  .nav-tab:hover{color:#1a1a1a}
+  .nav-tab.active{color:#1a1a1a;border-bottom:2px solid #1a1a1a}
+
+  .filter-toggle{display:flex;align-items:center;gap:6px;padding:14px 0;cursor:pointer;font-size:13px;color:#555;user-select:none;width:fit-content}
+  .filter-toggle:hover{color:#1a1a1a}
+  .filter-toggle-icon{font-size:12px;transition:transform 0.2s}
+  .filter-toggle-icon.open{transform:rotate(180deg)}
+
+  .filter-box{background:#f7f7f7;border:1px solid #e5e5e5;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:none}
+  .filter-box.open{display:block}
+  .chip-group{margin-bottom:0}
+  .chip-group+.chip-group{margin-top:12px}
+  .chip-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;font-weight:500}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{padding:6px 14px;border-radius:20px;border:1px solid #ddd;font-size:13px;cursor:pointer;background:#fff;color:#333;transition:all 0.15s;user-select:none}
+  .chip:hover{border-color:#999;background:#f5f5f5}
+  .chip.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+
+  .section-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:16px;margin-top:24px}
+  .cards-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px}
+  .material-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;width:190px;cursor:pointer;transition:all 0.15s}
+  .material-card:hover{border-color:#999;transform:translateY(-1px)}
+  .card-thumb{width:100%;height:110px;background:#e8e8e8;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#aaa;letter-spacing:0.3px}
+  .card-type-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid #e5e5e5;color:#888;margin-bottom:7px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
+  .card-name{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:3px;line-height:1.35}
+  .card-meta{font-size:11px;color:#aaa;line-height:1.4}
+  .resource-row{display:flex;flex-wrap:wrap;gap:12px}
+  .resource-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;width:155px;cursor:pointer;transition:all 0.15s}
+  .resource-card:hover{border-color:#999;transform:translateY(-1px)}
+  .resource-thumb{width:100%;height:75px;background:#e8e8e8;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#aaa}
+  .empty-state{padding:32px 0;color:#bbb;font-size:13px;font-style:italic;text-align:center}
+  .status-bar{background:#f7f7f7;border-top:1px solid #e5e5e5;padding:8px 32px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#aaa}
+  .click-badge{background:#1a1a1a;color:#fff;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:500}
+  .count-badge{font-size:12px;color:#aaa;font-weight:400;margin-left:6px}
+
+  .breadcrumb{font-size:12px;color:#aaa;margin-bottom:20px;display:flex;align-items:center;gap:6px;padding-top:24px}
+  .breadcrumb span{cursor:pointer;color:#888}
+  .breadcrumb span:hover{color:#1a1a1a;text-decoration:underline}
+  .breadcrumb-sep{color:#ccc}
+  .breadcrumb-current{color:#1a1a1a;cursor:default!important;text-decoration:none!important}
+  .detail-layout{display:flex;gap:36px;align-items:flex-start}
+  .detail-thumb{width:160px;min-width:160px;height:210px;background:#e8e8e8;border-radius:10px;border:1px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-size:13px;color:#aaa}
+  .detail-info{flex:1}
+  .detail-title{font-size:22px;font-weight:600;margin-bottom:6px;color:#1a1a1a;line-height:1.3}
+  .detail-meta{font-size:13px;color:#888;margin-bottom:24px;line-height:1.5}
+  .btn-primary{background:#1a1a1a;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;transition:opacity 0.15s}
+  .btn-primary:hover{opacity:0.82}
+  .btn-secondary{background:#fff;color:#333;border:1px solid #ddd;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all 0.15s;font-weight:500}
+  .btn-secondary:hover{border-color:#999;background:#f5f5f5}
+  .related-header{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:10px;margin-top:28px}
+  .related-list{display:flex;flex-direction:column;gap:8px}
+  .related-item{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:#f7f7f7;border-radius:9px;border:1px solid #eee}
+  .related-item-name{font-size:13px;color:#1a1a1a;font-weight:500;margin-bottom:2px}
+  .related-item-type{font-size:11px;color:#aaa}
+
+  .viewer-bar{background:#1a1a1a;padding:14px 24px;display:flex;align-items:center;gap:16px}
+  .viewer-bar-title{color:#fff;font-size:14px;font-weight:500;flex:1}
+  .viewer-btn{color:#fff;font-size:12px;opacity:0.55;cursor:pointer;background:none;border:1px solid #444;padding:5px 12px;border-radius:6px;transition:opacity 0.15s}
+  .viewer-btn:hover{opacity:1}
+  .viewer-body{background:#d8d8d8;flex:1;display:flex;align-items:center;justify-content:center;min-height:500px}
+  .viewer-page{background:#fff;width:560px;height:420px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:1px solid #ccc}
+  .viewer-page-label{font-size:13px;color:#bbb}
+  .viewer-page-title{font-size:16px;font-weight:600;color:#333}
+  .success-badge{background:#1a1a1a;color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:500;margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA 1: Biblioteca - tabs primero -->
+<div class="screen active" id="screen-1">
+  <div class="topbar">
+    <span class="topbar-logo">e-vocación Santillana</span>
+    <div class="topbar-nav">
+      <span style="opacity:1;border-bottom:1px solid #fff;padding-bottom:1px">Biblioteca</span>
+      <span>Formación</span><span>Recursos educativos</span><span>Mi recreo</span><span>Qué opinas</span>
+    </div>
+    <div class="topbar-user"><span>Bienvenido, Ana García</span></div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-title">Biblioteca</div>
+    <div class="page-subtitle">Estos son tus materiales para este curso</div>
+  </div>
+
+  <div class="content">
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="setTab(this,'all')">Ver todos</div>
+      <div class="nav-tab" onclick="setTab(this,'libros')">Libros</div>
+      <div class="nav-tab" onclick="setTab(this,'maletin')">Maletín</div>
+      <div class="nav-tab" onclick="setTab(this,'recursos')">Más recursos</div>
+    </div>
+
+    <div class="filter-toggle" onclick="toggleFiltros()" id="filter-toggle">
+      <span>Ver filtros</span>
+      <span class="filter-toggle-icon" id="filter-icon">▼</span>
+    </div>
+
+    <div class="filter-box" id="filter-box">
+      <div class="chip-group">
+        <div class="chip-label">Nivel</div>
+        <div class="chips" id="nivel-chips">
+          <div class="chip active" onclick="filterNivel(this,'todos')">Todos</div>
+          <div class="chip" onclick="filterNivel(this,'Infantil')">Infantil</div>
+          <div class="chip" onclick="filterNivel(this,'Primaria')">Primaria</div>
+          <div class="chip" onclick="filterNivel(this,'ESO')">ESO</div>
+          <div class="chip" onclick="filterNivel(this,'Bachillerato')">Bachillerato</div>
+          <div class="chip" onclick="filterNivel(this,'FP')">Formación profesional</div>
+        </div>
+      </div>
+      <div class="chip-group">
+        <div class="chip-label">Curso</div>
+        <div class="chips" id="curso-chips"></div>
+      </div>
+      <div class="chip-group">
+        <div class="chip-label">Materia</div>
+        <div class="chips" id="materia-chips"></div>
+      </div>
+    </div>
+
+    <div id="libros-section">
+      <div class="section-title">Libros <span class="count-badge" id="libros-count"></span></div>
+      <div class="cards-row" id="libros-grid"></div>
+    </div>
+
+    <div id="maletin-section">
+      <div class="section-title">Maletín <span class="count-badge" id="maletin-count"></span></div>
+      <div class="cards-row" id="maletin-grid"></div>
+    </div>
+
+    <div id="recursos-section">
+      <div class="section-title">Más recursos <span class="count-badge" id="recursos-count"></span></div>
+      <div class="resource-row" id="recursos-grid"></div>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <span>e-vocación · Biblioteca personal</span>
+    <span>Clics: <span class="click-badge" id="click-count">0</span></span>
+  </div>
+</div>
+
+<!-- PANTALLA 2: Ficha del material -->
+<div class="screen" id="screen-2">
+  <div class="topbar">
+    <span class="topbar-logo">e-vocación Santillana</span>
+    <div class="topbar-nav">
+      <span style="opacity:1;border-bottom:1px solid #fff;padding-bottom:1px">Biblioteca</span>
+      <span>Formación</span><span>Recursos educativos</span><span>Mi recreo</span><span>Qué opinas</span>
+    </div>
+    <div class="topbar-user"><span>Bienvenido, Ana García</span></div>
+  </div>
+  <div class="content">
+    <div class="breadcrumb">
+      <span onclick="goScreen('screen-1')">Biblioteca</span>
+      <span class="breadcrumb-sep">›</span>
+      <span id="bc-tab" onclick="goScreen('screen-1')">Libros</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current" id="bc-titulo"></span>
+    </div>
+    <div class="detail-layout">
+      <div class="detail-thumb" id="detail-icon">Sin imagen</div>
+      <div class="detail-info">
+        <div class="detail-title" id="detail-title"></div>
+        <div class="detail-meta" id="detail-meta"></div>
+        <button class="btn-primary" onclick="goVisor()">Abrir material</button>
+        <div class="related-header">Materiales relacionados</div>
+        <div class="related-list" id="related-list"></div>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar">
+    <span>Ficha del material</span>
+    <span>Clics: <span class="click-badge" id="click-count-2">0</span></span>
+  </div>
+</div>
+
+<!-- PANTALLA 3: Visor -->
+<div class="screen" id="screen-3">
+  <div class="viewer-bar">
+    <button class="viewer-btn" onclick="goScreen('screen-2')">← Volver</button>
+    <span class="viewer-bar-title" id="viewer-title"></span>
+    <button class="viewer-btn" onclick="goScreen('screen-1')">Mi biblioteca</button>
+    <button class="viewer-btn">Pantalla completa</button>
+  </div>
+  <div class="viewer-body">
+    <div class="viewer-page">
+      <span style="font-size:48px">📖</span>
+      <span class="viewer-page-title" id="viewer-book-title"></span>
+      <span class="viewer-page-label">Visor del libro digital</span>
+      <span class="success-badge" id="viewer-clicks"></span>
+    </div>
+  </div>
+  <div class="status-bar" style="background:#111;border-color:#333">
+    <span style="color:#888">Visor del libro digital</span>
+    <span style="color:#888">Clics totales: <span class="click-badge" id="click-count-3">0</span></span>
+  </div>
+</div>
+
+<script>
+var clicks = 0;
+var nivelFiltro = 'todos';
+var cursoFiltro = 'todos';
+var materiaFiltro = 'todas';
+var tabActivo = 'all';
+var filtrosAbiertos = false;
+var tabActivoNombre = 'Ver todos';
+
+var cursosPorNivel = {
+  'todos':['1º','2º','3º','4º','5º','6º'],
+  'Infantil':['1º','2º','3º'],
+  'Primaria':['1º','2º','3º','4º','5º','6º'],
+  'ESO':['1º','2º','3º','4º'],
+  'Bachillerato':['1º','2º'],
+  'FP':['1º','2º']
+};
+
+var materiasPorNivel = {
+  'todos':['Lengua','Matemáticas','Naturales','Inglés','Plástica','Música','Ed. Física','Valores','Religión','Filosofía','Física y Química','Biología','Historia','Economía'],
+  'Infantil':['Lenguaje','Matemáticas','Conocimiento del entorno','Inglés','Psicomotricidad','Música'],
+  'Primaria':['Lengua','Matemáticas','Naturales','Ciencias Sociales','Inglés','Plástica','Música','Ed. Física','Valores','Religión'],
+  'ESO':['Lengua','Matemáticas','Inglés','Geografía e Historia','Biología','Física y Química','Tecnología','Educación Plástica','Música','Ed. Física','Religión','Filosofía'],
+  'Bachillerato':['Lengua','Matemáticas','Inglés','Historia','Filosofía','Física','Química','Biología','Economía','Arte','Literatura'],
+  'FP':['Inglés técnico','Inglés profesional','Comunicación','Digitalización','Sostenibilidad']
+};
+
+var libros = [
+  {id:'l1',nivel:'Primaria',curso:'1º',materia:'Lengua',nombre:'LibroMedia: Lengua 1º',editorial:'Construyendo Mundos · Santillana'},
+  {id:'l2',nivel:'Primaria',curso:'1º',materia:'Matemáticas',nombre:'LibroMedia: Matemáticas 1º',editorial:'Saber Hacer · Santillana'},
+  {id:'l3',nivel:'Primaria',curso:'2º',materia:'Lengua',nombre:'LibroMedia: Lengua 2º',editorial:'Construyendo Mundos · Santillana'},
+  {id:'l4',nivel:'Primaria',curso:'2º',materia:'Matemáticas',nombre:'LibroMedia: Matemáticas 2º',editorial:'Saber Hacer · Santillana'},
+  {id:'l5',nivel:'Primaria',curso:'3º',materia:'Lengua',nombre:'LibroMedia: Lengua 3º',editorial:'Construyendo Mundos · Santillana'},
+  {id:'l6',nivel:'Primaria',curso:'3º',materia:'Matemáticas',nombre:'LibroMedia: Matemáticas 3º',editorial:'Saber Hacer · Santillana'},
+  {id:'l7',nivel:'ESO',curso:'1º',materia:'Lengua',nombre:'LibroMedia: Lengua ESO 1º',editorial:'Santillana ESO'},
+  {id:'l8',nivel:'ESO',curso:'1º',materia:'Matemáticas',nombre:'LibroMedia: Matemáticas ESO 1º',editorial:'Santillana ESO'},
+  {id:'l9',nivel:'ESO',curso:'2º',materia:'Lengua',nombre:'LibroMedia: Lengua ESO 2º',editorial:'Santillana ESO'},
+  {id:'l10',nivel:'Bachillerato',curso:'1º',materia:'Lengua',nombre:'LibroMedia: Lengua Bach. 1º',editorial:'Santillana Bachillerato'},
+  {id:'l11',nivel:'Bachillerato',curso:'1º',materia:'Matemáticas',nombre:'LibroMedia: Matemáticas Bach. 1º',editorial:'Santillana Bachillerato'},
+  {id:'l12',nivel:'FP',curso:'1º',materia:'Inglés técnico',nombre:'LibroMedia: Inglés técnico FP',editorial:'Santillana FP'},
+];
+
+var maletines = [
+  {id:'m1',nivel:'Primaria',curso:'1º',materia:'Lengua',nombre:'Guía didáctica: Lengua 1º',editorial:'Construyendo Mundos · Santillana'},
+  {id:'m2',nivel:'Primaria',curso:'1º',materia:'Matemáticas',nombre:'Recursos del profesor: Matemáticas 1º',editorial:'Saber Hacer · Santillana'},
+  {id:'m3',nivel:'Primaria',curso:'2º',materia:'Lengua',nombre:'Guía didáctica: Lengua 2º',editorial:'Construyendo Mundos · Santillana'},
+  {id:'m4',nivel:'ESO',curso:'1º',materia:'Lengua',nombre:'Guía didáctica: Lengua ESO 1º',editorial:'Santillana ESO'},
+  {id:'m5',nivel:'Bachillerato',curso:'1º',materia:'Matemáticas',nombre:'Recursos del profesor: Matemáticas Bach.',editorial:'Santillana Bachillerato'},
+];
+
+var recursos = [
+  {id:'r1',nivel:'Primaria',curso:'1º',materia:'Lengua',nombre:'Audio unidad 1',tipo:'MP3'},
+  {id:'r2',nivel:'Primaria',curso:'1º',materia:'Lengua',nombre:'Ficha de refuerzo u.1',tipo:'PDF'},
+  {id:'r3',nivel:'Primaria',curso:'1º',materia:'Matemáticas',nombre:'Juego: sumas y restas',tipo:'HTML'},
+  {id:'r4',nivel:'Primaria',curso:'2º',materia:'Lengua',nombre:'Presentación unidad 1',tipo:'PPT'},
+  {id:'r5',nivel:'Primaria',curso:'2º',materia:'Matemáticas',nombre:'Vídeo: tablas de multiplicar',tipo:'MP4'},
+  {id:'r6',nivel:'ESO',curso:'1º',materia:'Lengua',nombre:'Audio dictado ESO u.1',tipo:'MP3'},
+  {id:'r7',nivel:'ESO',curso:'1º',materia:'Matemáticas',nombre:'Presentación: funciones',tipo:'PPT'},
+  {id:'r8',nivel:'Bachillerato',curso:'1º',materia:'Lengua',nombre:'Audio: comentario de texto',tipo:'MP3'},
+];
+
+var iconosTipo = {MP3:'🎧',PDF:'📄',HTML:'🎮',PPT:'📊',MP4:'🎬'};
+
+function filtrar(arr){
+  return arr.filter(function(item){
+    var okNivel = nivelFiltro==='todos'||item.nivel===nivelFiltro;
+    var okCurso = cursoFiltro==='todos'||item.curso===cursoFiltro;
+    var okMateria = materiaFiltro==='todas'||item.materia===materiaFiltro;
+    return okNivel&&okCurso&&okMateria;
+  });
+}
+
+function renderChipsCurso(){
+  var cursos = cursosPorNivel[nivelFiltro]||cursosPorNivel['todos'];
+  var c = document.getElementById('curso-chips');
+  c.innerHTML = '<div class="chip active" onclick="filterCurso(this,\'todos\')">Todos</div>'
+    +cursos.map(function(x){return '<div class="chip" onclick="filterCurso(this,\''+x+'\')">'+x+'</div>';}).join('');
+  cursoFiltro='todos';
+}
+
+function renderChipsMateria(){
+  var materias = materiasPorNivel[nivelFiltro]||materiasPorNivel['todos'];
+  var c = document.getElementById('materia-chips');
+  c.innerHTML = '<div class="chip active" onclick="filterMateria(this,\'todas\')">Todas</div>'
+    +materias.map(function(x){return '<div class="chip" onclick="filterMateria(this,\''+x+'\')">'+x+'</div>';}).join('');
+  materiaFiltro='todas';
+}
+
+function toggleFiltros(){
+  clicks++;
+  filtrosAbiertos = !filtrosAbiertos;
+  var box = document.getElementById('filter-box');
+  var icon = document.getElementById('filter-icon');
+  var toggle = document.getElementById('filter-toggle');
+  box.classList.toggle('open', filtrosAbiertos);
+  icon.classList.toggle('open', filtrosAbiertos);
+  toggle.querySelector('span').textContent = filtrosAbiertos ? 'Ocultar filtros' : 'Ver filtros';
+  updateClicks();
+}
+
+function filterNivel(el,val){
+  clicks++;
+  nivelFiltro=val;
+  document.querySelectorAll('#nivel-chips .chip').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+  renderChipsCurso();
+  renderChipsMateria();
+  renderAll();
+  updateClicks();
+}
+
+function filterCurso(el,val){
+  clicks++;
+  cursoFiltro=val;
+  document.querySelectorAll('#curso-chips .chip').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+  renderAll();
+  updateClicks();
+}
+
+function filterMateria(el,val){
+  clicks++;
+  materiaFiltro=val;
+  document.querySelectorAll('#materia-chips .chip').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+  renderAll();
+  updateClicks();
+}
+
+function setTab(el,tab){
+  clicks++;
+  tabActivo=tab;
+  tabActivoNombre=el.textContent;
+  document.querySelectorAll('.nav-tab').forEach(function(p){p.classList.remove('active')});
+  el.classList.add('active');
+  renderAll();
+  updateClicks();
+}
+
+function renderLibros(){
+  var items=filtrar(libros);
+  var grid=document.getElementById('libros-grid');
+  var section=document.getElementById('libros-section');
+  document.getElementById('libros-count').textContent=items.length+(items.length===1?' libro':' libros');
+  if(tabActivo!=='all'&&tabActivo!=='libros'){section.style.display='none';return;}
+  section.style.display=items.length?'block':'none';
+  grid.innerHTML=items.map(function(l){
+    return '<div class="material-card" onclick="abrirDetalle(\''+l.id+'\',\'libro\')">'
+      +'<div class="card-thumb">Sin imagen</div>'
+      +'<div class="card-type-badge">Libro</div>'
+      +'<div class="card-name">'+l.nombre+'</div>'
+      +'<div class="card-meta">'+l.editorial+'</div>'
+      +'</div>';
+  }).join('')||'<div class="empty-state">No hay libros con los filtros seleccionados</div>';
+}
+
+function renderMaletin(){
+  var items=filtrar(maletines);
+  var grid=document.getElementById('maletin-grid');
+  var section=document.getElementById('maletin-section');
+  document.getElementById('maletin-count').textContent=items.length+(items.length===1?' maletín':' maletines');
+  if(tabActivo!=='all'&&tabActivo!=='maletin'){section.style.display='none';return;}
+  section.style.display=items.length?'block':'none';
+  grid.innerHTML=items.map(function(m){
+    return '<div class="material-card" onclick="abrirDetalle(\''+m.id+'\',\'maletin\')">'
+      +'<div class="card-thumb">Sin imagen</div>'
+      +'<div class="card-type-badge">Maletín</div>'
+      +'<div class="card-name">'+m.nombre+'</div>'
+      +'<div class="card-meta">'+m.editorial+'</div>'
+      +'</div>';
+  }).join('')||'<div class="empty-state">No hay maletines con los filtros seleccionados</div>';
+}
+
+function renderRecursos(){
+  var items=filtrar(recursos);
+  var grid=document.getElementById('recursos-grid');
+  var section=document.getElementById('recursos-section');
+  document.getElementById('recursos-count').textContent=items.length+' recursos';
+  if(tabActivo!=='all'&&tabActivo!=='recursos'){section.style.display='none';return;}
+  section.style.display=items.length?'block':'none';
+  grid.innerHTML=items.map(function(r){
+    return '<div class="resource-card" onclick="abrirDetalle(\''+r.id+'\',\'recurso\')">'
+      +'<div class="resource-thumb">'+(iconosTipo[r.tipo]||'📁')+'</div>'
+      +'<div class="card-type-badge">'+r.tipo+'</div>'
+      +'<div class="card-name" style="font-size:12px;font-weight:600;color:#1a1a1a;line-height:1.3">'+r.nombre+'</div>'
+      +'<div class="card-meta">'+r.materia+' '+r.curso+'</div>'
+      +'</div>';
+  }).join('')||'<div class="empty-state">No hay recursos con los filtros seleccionados</div>';
+}
+
+function renderAll(){renderLibros();renderMaletin();renderRecursos();}
+
+function updateClicks(){
+  ['click-count','click-count-2','click-count-3'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.textContent=clicks;
+  });
+}
+
+function abrirDetalle(id,tipo){
+  clicks++;
+  var item=null;
+  if(tipo==='libro')item=libros.find(function(l){return l.id===id});
+  if(tipo==='maletin')item=maletines.find(function(m){return m.id===id});
+  if(tipo==='recurso')item=recursos.find(function(r){return r.id===id});
+  if(!item)return;
+
+  document.getElementById('bc-tab').textContent=tabActivoNombre;
+  document.getElementById('bc-titulo').textContent=item.nombre;
+  document.getElementById('detail-icon').textContent='Sin imagen';
+  document.getElementById('detail-title').textContent=item.nombre;
+  document.getElementById('detail-meta').textContent=(item.editorial||item.tipo||'')+' · '+item.curso+' · '+item.materia;
+
+  var relacionados=[];
+  if(tipo==='libro'){
+    maletines.filter(function(m){return m.curso===item.curso&&m.materia===item.materia}).forEach(function(m){
+      relacionados.push({nombre:m.nombre,tipo:'Maletín'});
+    });
+    recursos.filter(function(r){return r.curso===item.curso&&r.materia===item.materia}).forEach(function(r){
+      relacionados.push({nombre:r.nombre,tipo:r.tipo});
+    });
+  }
+
+  document.getElementById('related-list').innerHTML=relacionados.length
+    ?relacionados.map(function(r){
+      return '<div class="related-item">'
+        +'<div><div class="related-item-name">'+r.nombre+'</div><div class="related-item-type">'+r.tipo+'</div></div>'
+        +'<button class="btn-secondary" onclick="goVisorDirect(\''+r.nombre+'\')">Acceder</button>'
+        +'</div>';
+    }).join('')
+    :'<div style="font-size:13px;color:#bbb;padding:8px 0">No hay materiales relacionados</div>';
+
+  document.getElementById('viewer-title').textContent=item.nombre;
+  document.getElementById('viewer-book-title').textContent=item.nombre;
+  updateClicks();
+  goScreen('screen-2');
+}
+
+function goVisor(){
+  clicks++;
+  updateClicks();
+  document.getElementById('viewer-clicks').textContent='✓ Llegaste en '+clicks+' clics';
+  goScreen('screen-3');
+}
+
+function goVisorDirect(nombre){
+  clicks++;
+  updateClicks();
+  document.getElementById('viewer-book-title').textContent=nombre;
+  document.getElementById('viewer-title').textContent=nombre;
+  document.getElementById('viewer-clicks').textContent='✓ Llegaste en '+clicks+' clics';
+  goScreen('screen-3');
+}
+
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  updateClicks();
+}
+
+renderChipsCurso();
+renderChipsMateria();
+renderAll();
+</script>
+</body>
+</html>
