@@ -32,24 +32,21 @@
   .chip{padding:7px 16px;border-radius:20px;border:1px solid #ddd;font-size:13px;cursor:pointer;background:#fff;color:#333;transition:all 0.15s;user-select:none}
   .chip:hover{border-color:#999;background:#f5f5f5}
   .chip.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-  .nav-pills{display:flex;gap:8px;margin-bottom:20px}
-  .nav-pill{padding:7px 18px;border-radius:20px;border:1px solid #ddd;font-size:13px;cursor:pointer;background:#fff;color:#666;transition:all 0.15s;user-select:none;display:flex;align-items:center;gap:6px}
-  .nav-pill:hover{border-color:#999}
-  .nav-pill.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-  .pill-icon{font-size:14px}
+  .nav-tabs{display:flex;border-bottom:2px solid #e5e5e5;margin-bottom:24px;gap:0}
+  .nav-tab{padding:10px 24px;font-size:14px;cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;color:#888;transition:all 0.15s;user-select:none;display:flex;align-items:center;gap:7px;font-weight:500}
+  .nav-tab:hover{color:#1a1a1a}
+  .nav-tab.active{color:#1a1a1a;border-bottom:2px solid #1a1a1a}
   .section-title{font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:14px;margin-top:28px;padding-bottom:10px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
   .section-title:first-of-type{margin-top:0}
   .section-count{font-size:12px;font-weight:400;color:#aaa}
   .cards-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px}
-  .material-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;width:190px;cursor:pointer;transition:all 0.15s}
-  .material-card:hover{border-color:#999;transform:translateY(-1px)}
+  .material-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;width:190px;cursor:default;transition:none}
   .card-thumb{width:100%;height:100px;background:#f0f0f0;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:32px}
   .card-type-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid #e5e5e5;color:#888;margin-bottom:7px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
   .card-name{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:3px;line-height:1.35}
   .card-meta{font-size:11px;color:#aaa;line-height:1.4}
   .resource-row{display:flex;flex-wrap:wrap;gap:12px}
-  .resource-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;width:150px;cursor:pointer;transition:all 0.15s}
-  .resource-card:hover{border-color:#999;transform:translateY(-1px)}
+  .resource-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;width:150px;cursor:default;transition:none}
   .resource-thumb{width:100%;height:72px;background:#f0f0f0;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
   .empty-section{padding:16px 0;color:#bbb;font-size:13px;font-style:italic}
   .status-bar{background:#f7f7f7;border-top:1px solid #e5e5e5;padding:8px 32px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#aaa}
@@ -137,11 +134,11 @@
       </div>
     </div>
 
-    <div class="nav-pills">
-      <div class="nav-pill active" onclick="setTab(this,'all')"><span class="pill-icon">◈</span> Ver todos</div>
-      <div class="nav-pill" onclick="setTab(this,'libros')"><span class="pill-icon">📖</span> Libros</div>
-      <div class="nav-pill" onclick="setTab(this,'maletin')"><span class="pill-icon">💼</span> Maletín</div>
-      <div class="nav-pill" onclick="setTab(this,'recursos')"><span class="pill-icon">🗂</span> Más recursos</div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" onclick="setTab(this,'all')">Ver todos</div>
+      <div class="nav-tab" onclick="setTab(this,'libros')">Libros</div>
+      <div class="nav-tab" onclick="setTab(this,'maletin')">Maletín</div>
+      <div class="nav-tab" onclick="setTab(this,'recursos')">Más recursos</div>
     </div>
 
     <div id="libros-section">
@@ -280,7 +277,7 @@ function renderLibros(){
   if(tabActivo !== 'all' && tabActivo !== 'libros'){ section.style.display='none'; return; }
   section.style.display = items.length ? 'block' : 'none';
   grid.innerHTML = items.map(function(l){
-    return '<div class="material-card" onclick="abrirDetalle(\''+l.id+'\',\'libro\')">'
+    return '<div class="material-card">'
       +'<div class="card-thumb"><span style="font-size:32px">'+l.icon+'</span></div>'
       +'<div class="card-type-badge">Libro</div>'
       +'<div class="card-name">'+l.nombre+'</div>'
@@ -297,7 +294,7 @@ function renderMaletin(){
   if(tabActivo !== 'all' && tabActivo !== 'maletin'){ section.style.display='none'; return; }
   section.style.display = items.length ? 'block' : 'none';
   grid.innerHTML = items.map(function(m){
-    return '<div class="material-card" onclick="abrirDetalle(\''+m.id+'\',\'maletin\')">'
+    return '<div class="material-card">'
       +'<div class="card-thumb"><span style="font-size:32px">'+m.icon+'</span></div>'
       +'<div class="card-type-badge">Maletín</div>'
       +'<div class="card-name">'+m.nombre+'</div>'
@@ -314,7 +311,7 @@ function renderRecursos(){
   if(tabActivo !== 'all' && tabActivo !== 'recursos'){ section.style.display='none'; return; }
   section.style.display = items.length ? 'block' : 'none';
   grid.innerHTML = items.map(function(r){
-    return '<div class="resource-card" onclick="abrirDetalle(\''+r.id+'\',\'recurso\')">'
+    return '<div class="resource-card">'
       +'<div class="resource-thumb"><span style="font-size:22px">'+r.icon+'</span></div>'
       +'<div class="card-type-badge">'+r.tipo+'</div>'
       +'<div class="card-name" style="font-size:12px;font-weight:600;color:#1a1a1a;line-height:1.3">'+r.nombre+'</div>'
@@ -395,7 +392,7 @@ function filterMateria(el, val){
 function setTab(el, tab){
   clicks++;
   tabActivo = tab;
-  document.querySelectorAll('.nav-pill').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.nav-tab').forEach(function(p){p.classList.remove('active')});
   el.classList.add('active');
   renderAll();
   updateClicks();
