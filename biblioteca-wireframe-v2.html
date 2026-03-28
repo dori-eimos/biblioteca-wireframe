@@ -42,15 +42,13 @@
 
   .section-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:16px;margin-top:24px}
   .cards-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:4px}
-  .material-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;width:190px;cursor:pointer;transition:all 0.15s}
-  .material-card:hover{border-color:#999;transform:translateY(-1px)}
+  .material-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:16px;width:190px;cursor:default;transition:none}
   .card-thumb{width:100%;height:110px;background:#e8e8e8;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#aaa;letter-spacing:0.3px}
   .card-type-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid #e5e5e5;color:#888;margin-bottom:7px;font-weight:500;text-transform:uppercase;letter-spacing:0.3px}
   .card-name{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:3px;line-height:1.35}
   .card-meta{font-size:11px;color:#aaa;line-height:1.4}
   .resource-row{display:flex;flex-wrap:wrap;gap:12px}
-  .resource-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;width:155px;cursor:pointer;transition:all 0.15s}
-  .resource-card:hover{border-color:#999;transform:translateY(-1px)}
+  .resource-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:14px;width:155px;cursor:default;transition:none}
   .resource-thumb{width:100%;height:75px;background:#e8e8e8;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#aaa}
   .empty-state{padding:32px 0;color:#bbb;font-size:13px;font-style:italic;text-align:center}
   .status-bar{background:#f7f7f7;border-top:1px solid #e5e5e5;padding:8px 32px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#aaa}
@@ -367,7 +365,7 @@ function renderLibros(){
   if(tabActivo!=='all'&&tabActivo!=='libros'){section.style.display='none';return;}
   section.style.display=items.length?'block':'none';
   grid.innerHTML=items.map(function(l){
-    return '<div class="material-card" onclick="abrirDetalle(\''+l.id+'\',\'libro\')">'
+    return '<div class="material-card">'
       +'<div class="card-thumb">Sin imagen</div>'
       +'<div class="card-type-badge">Libro</div>'
       +'<div class="card-name">'+l.nombre+'</div>'
@@ -384,7 +382,7 @@ function renderMaletin(){
   if(tabActivo!=='all'&&tabActivo!=='maletin'){section.style.display='none';return;}
   section.style.display=items.length?'block':'none';
   grid.innerHTML=items.map(function(m){
-    return '<div class="material-card" onclick="abrirDetalle(\''+m.id+'\',\'maletin\')">'
+    return '<div class="material-card">'
       +'<div class="card-thumb">Sin imagen</div>'
       +'<div class="card-type-badge">Maletín</div>'
       +'<div class="card-name">'+m.nombre+'</div>'
@@ -401,7 +399,7 @@ function renderRecursos(){
   if(tabActivo!=='all'&&tabActivo!=='recursos'){section.style.display='none';return;}
   section.style.display=items.length?'block':'none';
   grid.innerHTML=items.map(function(r){
-    return '<div class="resource-card" onclick="abrirDetalle(\''+r.id+'\',\'recurso\')">'
+    return '<div class="resource-card">'
       +'<div class="resource-thumb">'+(iconosTipo[r.tipo]||'📁')+'</div>'
       +'<div class="card-type-badge">'+r.tipo+'</div>'
       +'<div class="card-name" style="font-size:12px;font-weight:600;color:#1a1a1a;line-height:1.3">'+r.nombre+'</div>'
